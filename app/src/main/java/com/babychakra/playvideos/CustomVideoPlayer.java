@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.SurfaceTexture;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Surface;
@@ -19,11 +20,18 @@ import java.io.IOException;
 public class CustomVideoPlayer extends TextureView implements TextureView.SurfaceTextureListener
 {
 
-    Context context;
-    String url;
-    MediaPlayer mp;
-    Surface surface;
-    SurfaceTexture s;
+    private static final String TAG = "CustomVideoPlayer";
+    private Context context;
+
+    private MediaPlayer mediaPlayer;
+    private Uri source;
+    private boolean isLooping = false, isPaused = false;
+
+
+    public  CustomVideoPlayer(Context context){
+        super(context, null, 0);
+        this.context = context;
+    }
 
     public CustomVideoPlayer(Context context, AttributeSet attrs)
     {
@@ -31,89 +39,147 @@ public class CustomVideoPlayer extends TextureView implements TextureView.Surfac
         this.context = context;
     }
 
-    public CustomVideoPlayer(String ur, Context context)
+    public CustomVideoPlayer(Context context, AttributeSet attrs, int defStyle)
     {
-        super(context);
-        this.setSurfaceTextureListener(this);
-        this.url = ur;
-        this.context = context;
-
+        super(context, attrs, defStyle);
     }
 
     @Override
-    public void onSurfaceTextureAvailable(final SurfaceTexture surface, int arg1, int arg2) {
+    public void onSurfaceTextureAvailable(final SurfaceTexture surfaceTexture, int arg1, int arg2) {
 
-        this.s = surface;
-        Log.d("url", this.url);
-        startVideo(surface);
+        if(!isPaused){
+
+                if (mediaPlayer != null) {
+                    mediaPlayer.start();
+
+                } else {
+                    try {
+                        Surface surface = new Surface(surfaceTexture);
+                        mediaPlayer = new MediaPlayer();
+
+
+                        mediaPlayer.setLooping(isLooping);
+                        mediaPlayer.setDataSource(context, source);
+                        mediaPlayer.setSurface(surface);
+                        mediaPlayer.prepare();
+                        if(mediaPlayer != null) {
+                            mediaPlayer.start();
+                        }
+                    } catch (IllegalArgumentException | SecurityException | IllegalStateException | IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+
+        }
     }
-    @Override
-    public boolean onSurfaceTextureDestroyed(SurfaceTexture arg0) {
 
+    @Override
+    public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            //pre lollipop needs SurfaceTexture it owns before calling onDetachedFromWindow super
+            surface.release();
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
         return true;
     }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        // release resources on detach
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+        super.onDetachedFromWindow();
+    }
+
     @Override
     public void onSurfaceTextureSizeChanged(SurfaceTexture arg0, int arg1,int arg2) {
     }
+
     @Override
     public void onSurfaceTextureUpdated(SurfaceTexture arg0) {
+
     }
 
-    public void setVideo(String url)
+
+
+        public void startVideo()
     {
-        this.url = url;
-    }
+        Log.d(TAG, "Start Video");
+        if(!isPaused){
+            setSurfaceTextureListener(this);
+            if (this.getSurfaceTexture() != null) {
+                if (mediaPlayer != null) {
+                    mediaPlayer.start();
 
-    public void startVideo(SurfaceTexture t)
-    {
-        this.surface = new Surface(t);
-        this.mp = new MediaPlayer();
-        this.mp.setSurface(this.surface);
-        try {
-            Uri uri = Uri.parse(this.url);
-            this.mp.setDataSource(url);
-            this.mp.prepareAsync();
 
-            this.mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                public void onPrepared(MediaPlayer mp) {
+                } else {
+                    try {
+                        Surface surface = new Surface(this.getSurfaceTexture());
+                        mediaPlayer = new MediaPlayer();
 
-                    mp.setLooping(true);
-                    mp.start();
+
+                        mediaPlayer.setLooping(isLooping);
+                        mediaPlayer.setDataSource(context, source);
+                        mediaPlayer.setSurface(surface);
+                        mediaPlayer.prepare();
+                        if(mediaPlayer != null) {
+                            mediaPlayer.start();
+                        }
+                    } catch (IllegalArgumentException | SecurityException | IllegalStateException | IOException e) {
+                        e.printStackTrace();
+                    }
 
                 }
-            });
-        } catch (IllegalArgumentException e1) {
-            e1.printStackTrace();
-        } catch (SecurityException e1) {
-            e1.printStackTrace();
-        } catch (IllegalStateException e1) {
-            e1.printStackTrace();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-        try {
 
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
+            }
         }
-        try {
-
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        }
-
 
     }
 
-    public void changePlayState()
-    {
-        if(this.mp.isPlaying())
-            this.mp.pause();
-        else
-            this.mp.start();
+    public void setSource(Uri source) {
+        this.source = source;
+    }
+
+    public void setPaused(boolean paused) {
+        this.isPaused = paused;
+    }
+
+    public boolean getPaused(){
+        return isPaused;
+    }
+
+    public void setLooping(boolean looping) {
+        isLooping = looping;
+    }
+
+    public void pauseVideo() {
+        if (mediaPlayer != null) {
+            mediaPlayer.pause();
+        }
+    }
+
+    public boolean isPlaying() {
+        if (mediaPlayer != null) {
+            return mediaPlayer.isPlaying();
+        }
+        return false;
+    }
+
+    public void muteVideo() {
+        if (mediaPlayer != null)
+            mediaPlayer.setVolume(0f, 0f);
+    }
+
+    public void unmuteVideo() {
+        if (mediaPlayer != null)
+            mediaPlayer.setVolume(1f, 1f);
     }
 }
