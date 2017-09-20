@@ -3,6 +3,8 @@ package com.babychakra.playvideos;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import java.util.ArrayList;
 
@@ -27,13 +29,33 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.option_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.toggle_autoplay:
+                {
+                    Util.saveAutoPlayVideo(this);
+                    this.recreate();
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     private void init() {
         ButterKnife.bind(this);
 
         videoArrayList = new ArrayList<>();
         setDataSource();
         videosAdapter = new VideosAdapter(videoArrayList, this);
-        videRecyclerview.setAutoPlay(true);
+        videRecyclerview.setAutoPlay(Util.getAutoPlayVideo(this));
         videRecyclerview.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false));
         videRecyclerview.setAdapter(videosAdapter);
 
