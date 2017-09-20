@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         videoArrayList.add(video7);
 
         videosAdapter = new VideosAdapter(videoArrayList, this);
+        videRecyclerview.setAutoPlay(true);
         videRecyclerview.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false));
         videRecyclerview.setAdapter(videosAdapter);
 

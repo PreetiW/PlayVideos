@@ -2,6 +2,7 @@ package com.babychakra.playvideos;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -21,7 +22,7 @@ import java.util.List;
 public class CustomRecyclerView extends RecyclerView {
 
     boolean initialize = false;
-    private boolean autoPlay = true;
+    private boolean autoPlay = false;
 
     public CustomRecyclerView(Context context) {
         super(context);
@@ -81,7 +82,7 @@ public class CustomRecyclerView extends RecyclerView {
 
                 Rect rect_parent = new Rect();
                 getGlobalVisibleRect(rect_parent);
-                if(autoPlay) {
+                {
                     for (int i = firstVisiblePosition; i <= lastVisiblePosition; i++) {
                         final RecyclerView.ViewHolder holder = findViewHolderForAdapterPosition(i);
                         try {
@@ -101,7 +102,7 @@ public class CustomRecyclerView extends RecyclerView {
                                     Runnable myRunnable = new Runnable() {
                                         @Override
                                         public void run() {
-                                            if (!((CustomViewHolder) holder).isPaused())
+                                            if (!((CustomViewHolder) holder).isPaused()  && autoPlay)
                                                 ((CustomViewHolder) holder).playVideo();
                                         }
                                     };
@@ -129,6 +130,15 @@ public class CustomRecyclerView extends RecyclerView {
             handlerThread.quit();
         }
 
+    }
+
+    public void setAutoPlay(boolean autoPlay) {
+        this.autoPlay = autoPlay;
+    }
+
+    @Override
+    public boolean getGlobalVisibleRect(Rect r, Point globalOffset) {
+        return super.getGlobalVisibleRect(r, globalOffset);
     }
 
     public void stopVideos() {

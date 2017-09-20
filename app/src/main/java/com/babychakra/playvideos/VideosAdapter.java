@@ -44,6 +44,21 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder
 
     private void playVideo(final ViewHolder holder, int position) {
 
+        if(holder.isMuted){
+            holder.volumeImage.setImageResource(R.drawable.ic_volume_off_black_24dp);
+            holder.muteVideo();
+        }else {
+            holder.volumeImage.setImageResource(R.drawable.ic_volume_up_black_24dp);
+            holder.unmuteVideo();
+        }
+
+        if(holder.isPlaying()){
+            holder.playbackImage.setImageResource(R.drawable.ic_pause_circle_filled_black_24dp);
+        }else {
+            holder.playbackImage.setImageResource(R.drawable.ic_play_circle_filled_black_24dp);
+        }
+
+
         holder.volumeImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,22 +78,21 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder
             public void onClick(View v) {
                 if(holder.isPlaying()){
                     holder.pauseVideo();
+                    holder.setPaused(true);
                     holder.playbackImage.setImageResource(R.drawable.ic_play_circle_filled_black_24dp);
                 } else {
                     holder.playVideo();
+                    holder.setPaused(false);
                     holder.playbackImage.setImageResource(R.drawable.ic_pause_circle_filled_black_24dp);
                 }
             }
         });
 
+        holder.getImageView().setImageResource(R.mipmap.ic_android);
 
         Video video = videoIdsList.get(position);
         holder.videoTitle.setText("Video " + video.getId());
         holder.setVideoUrl(video.getUrl());
-        CustomVideoPlayer customVideoPlayer = new CustomVideoPlayer(context);
-        holder.layout.addView(customVideoPlayer);
-        holder.setVideoPlayer(customVideoPlayer);
-
     }
 
     @Override
@@ -91,15 +105,53 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder
         private TextView videoTitle;
         private LinearLayout layout;
         private ImageView playbackImage, volumeImage;
-        boolean isMuted;
+        boolean isMuted = true;
+        private CustomVideoPlayer customVideoPlayer;
 
         public ViewHolder(View itemView) {
             super(itemView);
             videoTitle = (TextView) itemView.findViewById(R.id.video_title);
-            layout = (LinearLayout) itemView.findViewById(R.id.layout);
             playbackImage = (ImageView) itemView.findViewById(R.id.playback_image);
             volumeImage = (ImageView) itemView.findViewById(R.id.volume_image);
+
         }
 
+        @Override
+        public void showVideo() {
+            super.showVideo();
+            playbackImage.setImageResource(R.drawable.ic_pause_circle_filled_black_24dp);
+            if(isMuted){
+                muteVideo();
+                volumeImage.setImageResource(R.drawable.ic_volume_off_black_24dp);
+            } else {
+                unmuteVideo();
+                volumeImage.setImageResource(R.drawable.ic_volume_up_black_24dp);
+            }
+        }
+
+        @Override
+        public void pauseVideo() {
+            super.pauseVideo();
+            playbackImage.setImageResource(R.drawable.ic_play_circle_filled_black_24dp);
+        }
+    }
+
+
+    @Override
+    public void onViewDetachedFromWindow(ViewHolder holder) {
+        if(holder != null){
+            holder.getVideoPlayer().clearAll();
+            holder.getVideoPlayer().invalidate();
+        }
+        super.onViewDetachedFromWindow(holder);
+    }
+
+    @Override
+    public void onViewRecycled(ViewHolder holder) {
+        if(holder != null){
+            holder.getVideoPlayer().clearAll();
+            holder.getVideoPlayer().invalidate();
+        }
+        super.onViewRecycled(holder);
     }
 }
