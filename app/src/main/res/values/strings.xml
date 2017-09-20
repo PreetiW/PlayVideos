@@ -1,4 +1,8 @@
 <resources>
-    <string name="app_name">PlayVideos</string>
+    <string name="app_name" translatable="false">PlayVideos</string>
     <string name="toggle_autoplay_string">Toggle Autoplay</string>
+
+    <string name="video_title">Video Title</string>
+    <string name="volume_button_label">Mute/Unmute</string>
+    <string name="play_button_label">Play/Pause</string>
 </resources>

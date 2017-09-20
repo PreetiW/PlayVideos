@@ -1,4 +1,4 @@
-package com.babychakra.playvideos;
+package com.babychakra.playvideos.util;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.babychakra.playvideos.R;
+
 import java.util.ArrayList;
 
 /**
@@ -18,7 +20,7 @@ import java.util.ArrayList;
 public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder> {
 
     private ArrayList<Video> videoIdsList;
-    Context context;
+    private Context context;
 
 
     public VideosAdapter(ArrayList<Video> videoIds, Context context){
@@ -91,7 +93,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder
         holder.getImageView().setImageResource(R.drawable.video_placeholder);
 
         Video video = videoIdsList.get(position);
-        holder.videoTitle.setText("Video " +video.getIndexPosition());
+        holder.videoTitle.setText(context.getString(R.string.video_title));
         holder.setVideoUrl(video.getUrl());
     }
 
@@ -100,7 +102,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder
         return videoIdsList.size();
     }
 
-    public class ViewHolder extends CustomViewHolder {
+    class ViewHolder extends CustomViewHolder {
 
         private TextView videoTitle;
         private LinearLayout layout;
@@ -108,7 +110,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder
         boolean isMuted = true;
         private CustomVideoPlayer customVideoPlayer;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             videoTitle = (TextView) itemView.findViewById(R.id.video_title);
             playbackImage = (ImageView) itemView.findViewById(R.id.playback_image);

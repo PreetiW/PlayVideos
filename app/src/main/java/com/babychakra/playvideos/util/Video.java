@@ -1,4 +1,4 @@
-package com.babychakra.playvideos;
+package com.babychakra.playvideos.util;
 
 /**
  * Created by Game on 18-09-17.

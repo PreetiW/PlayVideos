@@ -1,4 +1,4 @@
-package com.babychakra.playvideos;
+package com.babychakra.playvideos.util;
 
 import android.annotation.TargetApi;
 import android.content.Context;

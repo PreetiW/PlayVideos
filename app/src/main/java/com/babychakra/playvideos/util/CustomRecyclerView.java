@@ -1,4 +1,4 @@
-package com.babychakra.playvideos;
+package com.babychakra.playvideos.util;
 
 import android.content.Context;
 import android.graphics.Canvas;

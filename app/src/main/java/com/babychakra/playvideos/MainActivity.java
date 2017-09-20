@@ -3,8 +3,14 @@ package com.babychakra.playvideos;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.babychakra.playvideos.util.CustomRecyclerView;
+import com.babychakra.playvideos.util.Util;
+import com.babychakra.playvideos.util.Video;
+import com.babychakra.playvideos.util.VideosAdapter;
 
 import java.util.ArrayList;
 
@@ -17,8 +23,9 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.video_recylerview)
     CustomRecyclerView videRecyclerview;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
-    private VideosAdapter videosAdapter;
     private ArrayList<Video> videoArrayList;
 
     @Override
@@ -51,9 +58,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void init() {
         ButterKnife.bind(this);
-
+        setSupportActionBar(toolbar);
         videoArrayList = new ArrayList<>();
         setDataSource();
+        VideosAdapter videosAdapter;
         videosAdapter = new VideosAdapter(videoArrayList, this);
         videRecyclerview.setAutoPlay(Util.getAutoPlayVideo(this));
         videRecyclerview.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false));

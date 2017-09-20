@@ -1,4 +1,4 @@
-package com.babychakra.playvideos;
+package com.babychakra.playvideos.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -15,14 +15,15 @@ public class Util {
     public static void saveAutoPlayVideo(Context context){
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean savedAutoPlay = sharedPreferences.getBoolean(AUTO_PLAY_VIDEO, false);
+        boolean savedAutoPlay = sharedPreferences.getBoolean(AUTO_PLAY_VIDEO, true);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(AUTO_PLAY_VIDEO, !savedAutoPlay);
-        editor.commit();
+            editor.putBoolean(AUTO_PLAY_VIDEO, !savedAutoPlay);
+            editor.apply();
+
     }
     public static boolean getAutoPlayVideo(Context context){
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return sharedPreferences.getBoolean(AUTO_PLAY_VIDEO, false);
+        return sharedPreferences.getBoolean(AUTO_PLAY_VIDEO, true);
     }
 
 }
