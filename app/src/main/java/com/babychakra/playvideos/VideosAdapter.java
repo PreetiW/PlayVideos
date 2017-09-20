@@ -88,10 +88,10 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder
             }
         });
 
-        holder.getImageView().setImageResource(R.mipmap.ic_android);
+        holder.getImageView().setImageResource(R.drawable.video_placeholder);
 
         Video video = videoIdsList.get(position);
-        holder.videoTitle.setText("Video " + video.getId());
+        holder.videoTitle.setText("Video " +video.getIndexPosition());
         holder.setVideoUrl(video.getUrl());
     }
 

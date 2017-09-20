@@ -2,6 +2,7 @@ package com.babychakra.playvideos;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.AssetFileDescriptor;
 import android.graphics.SurfaceTexture;
 import android.media.MediaPlayer;
 import android.os.Build;
@@ -111,9 +112,10 @@ public class CustomVideoPlayer extends TextureView implements TextureView.Surfac
                                     }
                                 });
 
+                            AssetFileDescriptor afd = context.getAssets().openFd("big_buck_bunny.mp4");
 
                             mediaPlayer.setLooping(isLooping);
-                            mediaPlayer.setDataSource(source);
+                            mediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
                             mediaPlayer.setSurface(surface);
                             mediaPlayer.prepareAsync();
                             if (mediaPlayer != null) {
@@ -240,9 +242,10 @@ public class CustomVideoPlayer extends TextureView implements TextureView.Surfac
                                 }
                             });
 
+                        AssetFileDescriptor afd = context.getAssets().openFd("big_buck_bunny.mp4");
 
                         mediaPlayer.setLooping(isLooping);
-                        mediaPlayer.setDataSource(source);
+                        mediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
                         mediaPlayer.setSurface(surface);
                         mediaPlayer.prepareAsync();
                         /*if(mediaPlayer != null) {

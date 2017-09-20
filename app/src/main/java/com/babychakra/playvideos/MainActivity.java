@@ -31,11 +31,21 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         videoArrayList = new ArrayList<>();
+        setDataSource();
+        videosAdapter = new VideosAdapter(videoArrayList, this);
+        videRecyclerview.setAutoPlay(true);
+        videRecyclerview.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false));
+        videRecyclerview.setAdapter(videosAdapter);
+
+
+    }
+
+    private void setDataSource() {
         Video video1 = new Video("0", "1", "https://www.quirksmode.org/html5/videos/big_buck_bunny.mp4");
         videoArrayList.add(video1);
         Video video2 = new Video("1", "2", "http://techslides.com/demos/sample-videos/small.mp4");
         videoArrayList.add(video2);
-        Video video3 = new Video("2", "3", "http://sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4");
+        Video video3 = new Video("2", "3", "http://www.ebookfrenzy.com/android_book/movie.mp4");
         videoArrayList.add(video3);
         Video video4 = new Video("3", "4", "http://dev.exiv2.org/attachments/341/video-2012-07-05-02-29-27.mp4");
         videoArrayList.add(video4);
@@ -45,12 +55,32 @@ public class MainActivity extends AppCompatActivity {
         videoArrayList.add(video6);
         Video video7 = new Video("6", "7", "http://sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4");
         videoArrayList.add(video7);
-
-        videosAdapter = new VideosAdapter(videoArrayList, this);
-        videRecyclerview.setAutoPlay(true);
-        videRecyclerview.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false));
-        videRecyclerview.setAdapter(videosAdapter);
-
+        Video video8 = new Video("7", "8", "http://sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4");
+        videoArrayList.add(video8);
+        Video video9 = new Video("8", "9", "http://sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4");
+        videoArrayList.add(video9);
+        Video video10 = new Video("9", "10", "http://sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4");
+        videoArrayList.add(video10);
+        Video video11 = new Video("10", "11", "http://sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4");
+        videoArrayList.add(video11);
+        Video video12 = new Video("11", "12", "http://sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4");
+        videoArrayList.add(video12);
+        Video video13 = new Video("12", "13", "http://sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4");
+        videoArrayList.add(video13);
+        Video video14 = new Video("13", "14", "http://techslides.com/demos/sample-videos/small.mp4");
+        videoArrayList.add(video14);
+        Video video15 = new Video("14", "15", "http://techslides.com/demos/sample-videos/small.mp4");
+        videoArrayList.add(video15);
+        Video video16 = new Video("15", "16", "http://techslides.com/demos/sample-videos/small.mp4");
+        videoArrayList.add(video16);
+        Video video17 = new Video("16", "17", "http://techslides.com/demos/sample-videos/small.mp4");
+        videoArrayList.add(video17);
+        Video video18 = new Video("17", "18", "http://techslides.com/demos/sample-videos/small.mp4");
+        videoArrayList.add(video18);
+        Video video19 = new Video("18", "19", "http://techslides.com/demos/sample-videos/small.mp4");
+        videoArrayList.add(video19);
+        Video video20 = new Video("19", "20", "http://techslides.com/demos/sample-videos/small.mp4");
+        videoArrayList.add(video20);
 
     }
 
